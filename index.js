@@ -11,7 +11,7 @@ class Employee {
     }
 
     getHtml() {
-        return `<h1>Hi there my name is ${this.name}</h1>`;
+        return `<h1> ${this.name}</h1>`;
     }
 }
 
@@ -22,7 +22,7 @@ class Manager extends Employee {
     }
 
     getHtml() {
-        return `<h1>Hi there my name is ${this.name}, and I am the Manager!</h1>`;
+        return `<h1>${this.name}</h1>`;
     }
 }
 
@@ -33,7 +33,7 @@ class Engineer extends Employee {
     }
 
     getHtml() {
-        return `<h1>Hi there my name is ${this.name}, and I am an engineer, my github is ${this.github}!</h1>`;
+        return `<h1>${this.name}</h1>`;
     }
 }
 
@@ -44,7 +44,7 @@ class Intern extends Employee {
     }
 
     getHtml() {
-        return `<h1>Hi there my name is ${this.name}, and I am an intern from${this.school}!</h1>`;
+        return `<h1>${this.name}${this.school}</h1>`;
     }
 }
 
@@ -85,12 +85,12 @@ class Company {
     }
 };
 
-const promptCompany = companyInfo => {
+const promptCompany = () => {
 
-    inquirer.prompt([
+    return inquirer.prompt([
         {
           type: 'input',
-          name: 'company-name',
+          name: 'company',
           message: 'What is the company name?',
           validate: companyNameInput => {
             if (companyNameInput) {
@@ -116,7 +116,7 @@ const promptCompany = companyInfo => {
         },
         {
             type: 'input',
-            name: 'manager-id',
+            name: 'managerId',
             message: 'Provide the team managers ID?',
             validate: idInput => {
               if (idInput) {
@@ -153,111 +153,132 @@ const promptCompany = companyInfo => {
               }
             }
           },
-          
-        {
-          type: 'list',
-          name: 'employee-type',
-          message: 'Would you like to add more employees to the company or are you finished building your team?.',
-          choices: ['Add Engineer',  'Add Intern' , 'Im finished'],
-          validate: choices=> {
-              if(choices === 'Add Enginner') {
-                  engineerPrompt();
-              }
-          }
-          
-        },
        
       ])
+    };
 
-      const engineerPrompt = engineerInfo => {
+    const promptEmployee = companyData => {
 
-        inquirer.prompt([
+        if (!companyData.employees) {
+            companyData.employees = [];
+        }
+
+        console.log(`
+        =================
+        Add a New Employee
+        =================
+        `);
+
+        return inquirer.prompt([
+            {
+              type: 'list',
+              name: 'role',
+              message: 'Please choose the type of employee to add?',
+              choices: ['Engineer', 'Intern']
+            },
             {
               type: 'input',
-              name: 'company-name',
-              message: 'What is the company name?',
-              validate: companyNameInput => {
-                if (companyNameInput) {
+              name: 'employeeName',
+              message: 'What is the employees name?',
+              validate: nameInput => {
+                if (nameInput) {
                   return true;
                 } else {
-                  console.log('Please enter a company name.');
+                  console.log('Please enter a valid name!');
                   return false;
                 }
               }
             },
+            {
+              type: 'input',
+              name: 'employeeId',
+              message: 'Provide an employee ID.',
+              validate: employeeIdInput => {
+                if (employeeIdInput) {
+                  return true;
+                } else {
+                  console.log('Please enter a valid ID!');
+                  return false;
+                }
+              }
+            },
+            {
+              type: 'input',
+              name: 'employeeEmail',
+              message: 'Provide the employees email address.',
+              validate: employeeEmailInput => {
+                if (employeeEmailInput) {
+                  return true;
+                } else {
+                  console.log('Please enter a valid email!');
+                  return false;
+                }
+              }
+            },
+            {
+                type: 'input',
+                name: 'github',
+                message: 'Provide the employees github account if applicable.',
+              },
+              {
+                type: 'input',
+                name: 'school',
+                message: 'Provide the employees school if applicable.',
+              },
+              {
+                type: 'confirm',
+                name: 'confirmAddEmployee',
+                message: 'Would you like to add another employee?',
+                default: false   
+              }
+          ])
+          .then(employeeData => {
+              companyData.employees.push(employeeData);
+              if (employeeData.confirmAddEmployee) {
+                  return promptEmployee(companyData);
+              } else {
+                  return companyData;
+              }
+          })
+    }
 
-        ])
+
+
+      
+    
+        
+
+        
     
 
-      .then(answers => {
+    
+    
+    promptCompany()
+    .then(promptEmployee)
+    .then(answers => {
 
-        const {title, description, installation, usage, contributing, tests, license, username, email} = answers;
+        const {company, manager, managerId, email, office, newEmployee, role, employeeName, employeeId, employeeEmail, github, school } = answers;
     
-        const template=`# ${title}
-    
-           
-    
-    
-    
-    ## Description
-    ${description}
-            
-    ## Table of Contents
-    * [Description](#Description) <br>
-    * [Table of Contents](#Table-of-Contents) <br>
-    * [Installation](#Installation) <br>
-    * [Usage](#Usage) <br>
-    * [Tests](#Tests) <br>
-    * [Licenses](#Licenses) <br>
-    * [Questions](#Questions) 
-    
-    ## Installation
-    ${installation}
-    
-    ## Usage
-    ${usage}
-    
-    ## Contributing
-    ${contributing}
-    
-    ## Tests
-    ${tests}
-    
-    ### Licenses
-    ![badge](https://img.shields.io/badge/license-${license}-brightgreen) <br>
-    This project was created under the ${license} license.
-    
-    ### Questions
-    Contact me:
-    
-    [Github](https://www.github.com/${username}) <br>
-    [Email](mailto:${email})
-            
-            
-            `
+        const companyEmployees = new Company("Apple");
+
+        companyEmployees.addManager(manager, managerId, email, office);
+        
+        companyEmployees.addEngineer("Hector Perez", "3425634", "hector@emaol.com", "332");
+        
+        companyEmployees.addIntern("Hector Perez", "3425634", "hector@emaol.com", "332");
+        
+        console.log(companyEmployees.getHtml()); 
         
            
-    fs.writeFile("./README.md", template, err =>
+   /* fs.writeFile("./README.md", template, err =>
       err ? console.log(err) : console.log('You are all set! Your README.md file has been created.')
-    );
+    );*/
       
       
     })
-    };
-}
     
-    
-    promptCompany();
+
+   
 
 
 
-
-/*const company = new Company("Apple");
-
-company.addManager("Hector Perez", "3425634", "hector@emaol.com", "332");
-
-company.addEngineer("Hector Perez", "3425634", "hector@emaol.com", "332");
-
-company.addIntern("Hector Perez", "3425634", "hector@emaol.com", "332");
-
-console.log(company.getHtml()); */ 
