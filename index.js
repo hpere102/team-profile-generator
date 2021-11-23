@@ -2,18 +2,9 @@ const inquirer = require('inquirer');
 const fs = require('fs');
 const path = require("path");
 const Manager = require("./lib/Manager");
-let placeholder = {
-  type: "",
-  name: "",
-  message: "",
-  validate: answer => {
-    if (answer !== "") {
-        return true
-    } else {
-      return "Please enter a value."
-    }
-  }
-}
+const Engineer = require("./lib/Engineer");
+const Intern = require("./lib/Intern");
+const Employee = require('./lib/Employee');
 
 const company = [];  
 
@@ -63,7 +54,7 @@ function init() {
           {
             type: "input",
             name: "officeNumber",
-            message: "What is your manager's office number?",
+            message: "What is the manager's office number?",
             validate: answer => {
               if (answer !== "") {
                   return true
@@ -126,18 +117,138 @@ function init() {
 
   function addEngineer() {
     console.log("Add engineer information.");
-    createTeam();
+    
+    inquirer
+    .prompt ([
+          {
+            type: "input",
+            name: "engineerName",
+            message: "What is the engineer's name?",
+            validate: answer => {
+              if (answer !== "") {
+                  return true
+              } else {
+                return "Please enter a value."
+              }
+            }
+          },
+          {
+            type: "input",
+            name: "engineerId",
+            message: "What is the engineer's ID?",
+            validate: answer => {
+              if (answer !== "") {
+                  return true
+              } else {
+                return "Please enter a value."
+              }
+            }
+          },
+          {
+            type: "input",
+            name: "engineerEmail",
+            message: "What is the engineer's email?",
+            validate: answer => {
+              if (answer !== "") {
+                  return true
+              } else {
+                return "Please enter a value."
+              }
+            }
+          },
+          {
+            type: "input",
+            name: "github",
+            message: "What is the engineer's github account?",
+            validate: answer => {
+              if (answer !== "") {
+                  return true
+              } else {
+                return "Please enter a value."
+              }
+            }
+          }
+    ]).then(answers => { 
+      const newEngineer = new Engineer(answers.engineerName, answers.engineerId, answers.engineerEmail, answers.github);
+      company.push(newEngineer);
+     
+     createTeam();
+
+    })
   };
 
   function addIntern() {
     console.log("Add intern information.");
-    createTeam();
+
+    inquirer
+    .prompt ([
+          {
+            type: "input",
+            name: "internName",
+            message: "What is the intern's name?",
+            validate: answer => {
+              if (answer !== "") {
+                  return true
+              } else {
+                return "Please enter a value."
+              }
+            }
+          },
+          {
+            type: "input",
+            name: "internId",
+            message: "What is the intern's ID?",
+            validate: answer => {
+              if (answer !== "") {
+                  return true
+              } else {
+                return "Please enter a value."
+              }
+            }
+          },
+          {
+            type: "input",
+            name: "internEmail",
+            message: "What is the intern's email?",
+            validate: answer => {
+              if (answer !== "") {
+                  return true
+              } else {
+                return "Please enter a value."
+              }
+            }
+          },
+          {
+            type: "input",
+            name: "school",
+            message: "What school did the intern attend?",
+            validate: answer => {
+              if (answer !== "") {
+                  return true
+              } else {
+                return "Please enter a value."
+              }
+            }
+          }
+    ]).then(answers => { 
+      const newIntern = new Intern(answers.internName, answers.internId, answers.internEmail, answers.school);
+      company.push(newIntern);
+     
+     createTeam();
+
+    })
+    
   };
 
   function buildTeam() {
-    console.log("Building team...")
+    console.log("Building team...");
+
+
   };
+
   createManager();
+
+  
 }
 
 init();
