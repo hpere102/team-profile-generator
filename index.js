@@ -10,9 +10,6 @@ class Employee {
         this.email=email;
     }
 
-    getHtml() {
-        return `<h1> ${this.name}</h1>`;
-    }
 }
 
 class Manager extends Employee {
@@ -22,31 +19,37 @@ class Manager extends Employee {
     }
 
     getHtml() {
-        return `<h1>${this.name}</h1>`;
+        return `<h2>${this.name}</h2><br>
+                <h2>${this.id}</h2><br>
+                <h2>${this.email}</h2><br>
+                <h2>${this.officeNumber}</h2><br>
+        
+        `;
     }
 }
 
-class Engineer extends Employee {
-    constructor(name, id, email, github) {
+class addNewEmployee extends Employee {
+    constructor(role, name, id, email, github, school) {
         super(name, id, email);
         this.github=github;
-    }
-
-    getHtml() {
-        return `<h1>${this.name}</h1>`;
-    }
-}
-
-class Intern extends Employee {
-    constructor(name, id, email, school) {
-        super(name, id, email);
+        this.role=role;
         this.school=school;
     }
 
     getHtml() {
-        return `<h1>${this.name}${this.school}</h1>`;
+        return `<h2>${this.role}</h2><br>
+                <h2>${this.name}</h2><br>
+                <h2>${this.id}</h2><br>
+                <h2>${this.email}</h2><br>
+                <h2>${this.github}</h2><br>
+                <h2>${this.school}</h2><br>
+        
+        `;
     }
+    
 }
+
+
 
 class Company {
     constructor(name) {
@@ -58,13 +61,11 @@ class Company {
         this.team.push(new Manager(name, id, email, officeNumber));
     }
 
-    addEngineer(name, id, email, github) {
-        this.team.push(new Engineer(name, id, email, github));
+    addNewEmployee(role, name, id, email, github, school) {
+        this.team.push(new addNewEmployee(role, name, id, email, github, school));
     }
 
-    addIntern(name, id, email, school) {
-        this.team.push(new Intern(name, id, email, school));
-    }
+    
 
 
     getHtml() {
@@ -164,9 +165,9 @@ const promptCompany = () => {
         }
 
         console.log(`
-        =================
+        ==================
         Add a New Employee
-        =================
+        ==================
         `);
 
         return inquirer.prompt([
@@ -232,6 +233,8 @@ const promptCompany = () => {
                 default: false   
               }
           ])
+          
+
           .then(employeeData => {
               companyData.employees.push(employeeData);
               if (employeeData.confirmAddEmployee) {
@@ -239,7 +242,10 @@ const promptCompany = () => {
               } else {
                   return companyData;
               }
+              
           })
+          
+          
     }
 
 
@@ -257,25 +263,28 @@ const promptCompany = () => {
     .then(promptEmployee)
     .then(answers => {
 
-        const {company, manager, managerId, email, office, newEmployee, role, employeeName, employeeId, employeeEmail, github, school } = answers;
-    
-        const companyEmployees = new Company("Apple");
+      const {company, manager, managerId, email, office,role, employeeName, employeeId, employeeEmail, github, school} = answers;
 
-        companyEmployees.addManager(manager, managerId, email, office);
-        
-        companyEmployees.addEngineer("Hector Perez", "3425634", "hector@emaol.com", "332");
-        
-        companyEmployees.addIntern("Hector Perez", "3425634", "hector@emaol.com", "332");
-        
-        console.log(companyEmployees.getHtml()); 
-        
-           
-   /* fs.writeFile("./README.md", template, err =>
-      err ? console.log(err) : console.log('You are all set! Your README.md file has been created.')
-    );*/
+  
+      const companyEmployees = new Company(company);
+
+      companyEmployees.addManager(manager, managerId, email, office);
       
+      companyEmployees.addNewEmployee(role, employeeName, employeeId, employeeEmail, github, school);
       
-    })
+      companyEmployees.addNewEmployee(role, employeeName, employeeId, employeeEmail, github, school);
+
+
+      console.log(companyEmployees.getHtml());
+      
+         
+ /* fs.writeFile("./README.md", template, err =>
+    err ? console.log(err) : console.log('You are all set! Your README.md file has been created.')
+  );*/
+    
+    
+  })
+    
     
 
    
