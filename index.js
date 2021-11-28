@@ -1,12 +1,14 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
-const path = require("path");
 const Manager = require("./lib/Manager");
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
-const Employee = require('./lib/Employee');
+const generateHTML = require("./src/generateHTML");
+
 
 const company = [];  
+
+
 
 function init() {
   console.log("Ready to build your team?")
@@ -101,7 +103,9 @@ function init() {
             addIntern();
             break;
          default:
-           buildTeam();
+          fs.writeFile("./dist/index.html", generateHTML(company), err =>
+          err ? console.log(err) : console.log("You're all set! Your Team Profile has been created.")
+        );
       }
 
     })
@@ -240,58 +244,11 @@ function init() {
     
   };
 
-  function buildTeam() {
-    console.log("Building team...");
 
-
-  };
-
-  createManager();
-
-  
+    createManager();
 }
+ // };
 
+
+  
 init();
-
-      
-    
-        
-
-        
-    
-
-    
-    
-   /* promptCompany()
-    .then(promptEmployee)
-    .then(answers => {
-
-      const {company, manager, managerId, email, office,} = answers;
-
-  
-      const companyEmployees = new Company(company);
-
-      companyEmployees.addManager(manager, managerId, email, office);
-      
-      companyEmployees.addNewEmployee(role, employeeName, employeeId, employeeEmail, github, school);
-      
-      companyEmployees.addNewEmployee(role, employeeName, employeeId, employeeEmail, github, school);
-
-
-      console.log(companyEmployees.getHtml());
-      
-         
- fs.writeFile("./README.md", template, err =>
-    err ? console.log(err) : console.log('You are all set! Your README.md file has been created.')
-  );
-    
-    
-  })*/
-  
-    
-    
-
-   
-
-
-
