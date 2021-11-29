@@ -1,48 +1,50 @@
-const generateManager= function(manager) {
+
+
+const createManager = function(manager) {
     return `
-    <div class="col-4 mt-4">
-        <div>
-            <div class="card-header manager-card">
-                <h2>${manager.name}</h2>
-                <h3>Manager</h3><i class="material-icons">work</i>
-            </div>
-            <div class="card-body">
+    <div class="col-3 mt-3">
+     <div>
+        <div class="card-header manager-card">
+                <h4>${manager.name}</h4>
+                <h6>Manager</h6><i class="material-icons">work</i>
+        </div>
+        <div class="card-body">
                 <p class="id">ID: ${manager.id}</p>
                 <p class="email">Email: <a href="mailto:${manager.email}">${manager.email}</a></p>
                 <p class="office-number">Office Number: ${manager.officeNumber}</p>
-            </div>
         </div>
-    </div>    
-    `;
+  </div>
+</div>    
+    `
 };
 
 
-const generateEngineer=function(engineer) {
+const createEngineer = function(engineer) {
     return `
-    <div class="col-4 mt-4">
+    <div class="col-3 mt-3">
         <div>
             <div class="card-header engineer-card">
-                <h3>${engineer.name}</h3>
-                <h4>Engineer</h4><i class="material-icons">settings_input_antenna</i>
+                <h4>${engineer.name}</h4>
+                <h6>Engineer</h6><i class="material-icons">settings_input_antenna</i>
             </div>
-            <div class="card-body">
-                <p class="id">ID: ${engineer.id}</p>
-                <p class="email">Email: <a href="mailto:${engineer.email}">${engineer.email}</a></p>
-                <p class="github">Github: <a href="https://github.com/${engineer.github}">${engineer.github}</a></p>
-            </div>
-        </div>
+                <div class="card-body">
+                    <p class="id">ID: ${engineer.id}</p>
+                    <p class="email">Email: <a href="mailto:${engineer.email}">${engineer.email}</a></p>
+                    <p class="github">Github: <a href="https://github.com/${engineer.github}">${engineer.github}</a></p>
+                </div>
+          </div>
     </div>    
-    `;
+    `
 };
 
 
-const generateIntern=function(intern) {
+const createIntern = function(intern) {
     return `
-    <div class="col-4 mt-4">
+    <div class="col-3 mt-3">
         <div>
             <div class="card-header intern-card">
-                <h3>${intern.name}</h3>
-                <h4>Intern</h4><i class="material-icons">school</i>
+                <h4>${intern.name}</h4>
+                <h6>Intern</h6><i class="material-icons">school</i>
             </div>
             <div class="card-body">
                 <p class="id">ID: ${intern.id}</p>
@@ -51,43 +53,51 @@ const generateIntern=function(intern) {
             </div>
         </div>
     </div>    
-    `;
+    `
 };
 
 
-generateHTML=(data)=> {
-    pageArray=[];
+createHTML = (employeeinfo) => {
 
-    for(let i=0;i<data.length;i++) {
-        const employee=data[i];
+
+    myTeamArr = [];
+
+    for(let i=0;i<employeeinfo.length;i++) {
+
+        const employee=employeeinfo[i];
+
         const role=employee.getRole();
 
         if(role==="Manager") {
-            const managerCard=generateManager(employee);
-            pageArray.push(managerCard);
+            const managerCard=createManager(employee);
+            myTeamArr.push(managerCard);
         };
 
         if (role==="Engineer") {
-            const engineerCard=generateEngineer(employee);
-            pageArray.push(engineerCard);
+            const engineerCard=createEngineer(employee);
+            myTeamArr.push(engineerCard);
         };
 
         if(role==='Intern') {
-            const internCard=generateIntern(employee);
-            pageArray.push(internCard);
+            const internCard=createIntern(employee);
+            myTeamArr.push(internCard);
         };
     };
 
-    const employeeRoles=pageArray.join('');
-    const createTeamProfiles=generatePage(employeeRoles);
+    const employeeRoles=myTeamArr.join('');
+    
+    const createTeamProfiles=myTeam(employeeRoles);
     return createTeamProfiles;
 };
 
 
-const generatePage=function (employeeProfiles) {
+
+const myTeam = function (employeeProfiles) {
     return `
-    <!DOCTYPE html>
-    <html lang="en">
+
+ <!DOCTYPE html>
+
+ <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -110,8 +120,10 @@ const generatePage=function (employeeProfiles) {
             </div>
         </main>
     </body>
-    </html>
+</html>
   `;
 };
 
-module.exports=generateHTML;
+
+
+module.exports = createHTML;

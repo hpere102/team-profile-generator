@@ -3,7 +3,7 @@ const fs = require('fs');
 const Manager = require("./lib/Manager");
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
-const generateHTML = require("./src/generateHTML");
+const createHTML = require("./src/generateHTML");
 
 
 const company = [];  
@@ -103,7 +103,7 @@ function init() {
             addIntern();
             break;
          default:
-          fs.writeFile("./dist/index.html", generateHTML(company), err =>
+          fs.writeFile("./dist/index.html", createHTML(company), err =>
           err ? console.log(err) : console.log("You're all set! Your Team Profile has been created.")
         );
       }
